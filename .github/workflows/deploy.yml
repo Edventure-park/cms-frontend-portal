@@ -44,7 +44,6 @@ jobs:
 
       - name: Build OpenNext output
         run: pnpm exec opennextjs-cloudflare build
-        working-directory: apps/web
 
       - name: Install wrangler CLI
         run: pnpm add -g wrangler
