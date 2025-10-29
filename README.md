@@ -48,7 +48,7 @@ Optimized for speed, scalability, and maintainability, the EVP CMS Frontend serv
 cms-frontend/
 ├── .github/
 │   └── workflows/
-│       └── deploy-workers.yml     # GitHub Actions workflow for automatic Cloudflare Worker deployment
+│       └── deploy.yml     # GitHub Actions workflow for automatic Cloudflare Worker deployment
 │   └── FUNDING.yml                # GitHub Sponsors configuration file
 │
 ├── app/
