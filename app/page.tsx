@@ -74,34 +74,36 @@ const EdventureDashboard = () => {
 
   if (!authenticated) {
     return (
-      <div className="relative flex h-screen items-center justify-center bg-gradient-to-br from-[#0a1f1a] via-[#0d2820] to-[#0f3528] overflow-hidden">
+      <div className="relative flex h-screen items-center justify-center bg-gradient-to-br from-slate-950 via-gray-950 to-black overflow-hidden">
         {/* Animated Grid Background */}
         <div className="absolute inset-0 opacity-20">
           <div className="absolute inset-0" style={{
-            backgroundImage: `linear-gradient(rgba(16, 185, 129, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(16, 185, 129, 0.1) 1px, transparent 1px)`,
+            backgroundImage: `linear-gradient(rgba(34, 197, 94, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(59, 130, 246, 0.1) 1px, transparent 1px)`,
             backgroundSize: '50px 50px'
           }}></div>
         </div>
 
-        {/* Glowing Orbs */}
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-emerald-500/20 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-green-500/20 rounded-full blur-3xl"></div>
+        {/* Cool Glowing Orbs */}
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl animate-float animate-pulse-glow"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute top-1/2 left-1/2 w-80 h-80 bg-cyan-500/8 rounded-full blur-3xl animate-float" style={{ animationDelay: '4s' }}></div>
+        <div className="absolute top-3/4 left-1/3 w-72 h-72 bg-emerald-400/8 rounded-full blur-3xl animate-pulse-glow" style={{ animationDelay: '1s' }}></div>
 
         {/* Login Form */}
         <form
           onSubmit={handleLogin}
-          className="relative bg-gradient-to-br from-[#0d2820]/95 to-[#0a1f1a]/95 backdrop-blur-2xl shadow-[0_0_80px_rgba(16,185,129,0.3)] rounded-3xl p-10 w-full max-w-md border border-emerald-500/30"
+          className="relative bg-black/60 backdrop-blur-xl shadow-[0_0_60px_rgba(34,197,94,0.15)] rounded-3xl p-10 w-full max-w-md border border-emerald-500/20"
         >
           {/* Top Icon */}
           <div className="text-center mb-8">
-            <div className="w-24 h-24 bg-gradient-to-br from-emerald-600 via-emerald-500 to-green-400 rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-[0_0_40px_rgba(16,185,129,0.6)] border border-emerald-400/50 relative overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-t from-transparent via-white/20 to-transparent"></div>
-              <Lock className="h-12 w-12 text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.7)] relative z-10" />
+            <div className="w-24 h-24 bg-gradient-to-br from-emerald-600 via-cyan-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-[0_0_40px_rgba(34,197,94,0.4)] border border-emerald-500/30 relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-t from-transparent via-white/10 to-transparent"></div>
+              <Lock className="h-12 w-12 text-emerald-400 drop-shadow-[0_0_10px_rgba(34,197,94,0.6)] relative z-10" />
             </div>
-            <h2 className="text-3xl font-extrabold text-emerald-100 mb-2 tracking-wide drop-shadow-[0_0_15px_rgba(16,185,129,0.5)]">
+            <h2 className="text-3xl font-extrabold bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent mb-2 tracking-wide">
               Edventure Park CMS
             </h2>
-            <p className="text-emerald-300 text-sm font-light">Startup Incubation Portal</p>
+            <p className="text-gray-400 text-sm font-light">Startup Incubation Portal</p>
           </div>
 
           {/* Password Input */}
@@ -110,7 +112,7 @@ const EdventureDashboard = () => {
             placeholder="Enter Admin Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-5 py-4 bg-[#0a1f1a]/80 border border-emerald-500/30 rounded-xl mb-4 focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 text-emerald-100 placeholder-emerald-400/50 transition-all duration-300 shadow-inner focus:shadow-[0_0_15px_rgba(16,185,129,0.3)] outline-none"
+            className="w-full px-5 py-4 bg-black/40 border border-emerald-500/20 rounded-xl mb-4 focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 text-gray-100 placeholder-gray-500 transition-all duration-300 shadow-inner focus:shadow-[0_0_15px_rgba(34,197,94,0.3)] outline-none hover:border-emerald-500/40"
           />
 
           {/* Error Message */}
@@ -124,19 +126,20 @@ const EdventureDashboard = () => {
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full py-4 bg-gradient-to-r from-emerald-600 via-emerald-500 to-green-500 hover:from-emerald-500 hover:to-green-400 text-white rounded-xl transition-all font-semibold shadow-[0_0_25px_rgba(16,185,129,0.5)] hover:shadow-[0_0_40px_rgba(16,185,129,0.8)] transform hover:scale-[1.02] active:scale-[0.98]"
+            className="w-full py-4 bg-gradient-to-r from-emerald-600 via-cyan-600 to-blue-600 hover:from-emerald-500 hover:via-cyan-500 hover:to-blue-500 text-white rounded-xl transition-all font-semibold shadow-[0_0_25px_rgba(34,197,94,0.4)] hover:shadow-[0_0_35px_rgba(34,197,94,0.6)] transform hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden group"
           >
-            Access Dashboard
+            <span className="relative z-10">Access Dashboard</span>
+            <div className="absolute inset-0 bg-gradient-to-r from-emerald-500 via-cyan-500 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           </button>
 
           {/* Security Footer */}
-          <div className="mt-6 text-center text-emerald-300 text-xs tracking-wide flex items-center justify-center gap-2">
-            <Shield className="h-4 w-4 text-emerald-400" />
+          <div className="mt-6 text-center text-gray-400 text-xs tracking-wide flex items-center justify-center gap-2">
+            <Shield className="h-4 w-4 text-emerald-500" />
             <span>Secured by encrypted authentication</span>
           </div>
 
-          {/* Metallic Glow Ring */}
-          <div className="absolute -inset-[2px] rounded-3xl bg-gradient-to-r from-emerald-500 via-green-400 to-emerald-600 opacity-30 blur-md -z-10"></div>
+          {/* Subtle Glow Ring */}
+          <div className="absolute -inset-[2px] rounded-3xl bg-gradient-to-r from-emerald-500/30 via-cyan-500/30 to-blue-500/30 opacity-20 blur-md -z-10"></div>
         </form>
       </div>
     );
@@ -154,11 +157,11 @@ const EdventureDashboard = () => {
 
   const countryAnalytics = [
     { name: 'United States', value: 3245, color: '#10B981' },
-    { name: 'United Kingdom', value: 2156, color: '#059669' },
-    { name: 'India', value: 1876, color: '#34D399' },
-    { name: 'Canada', value: 1543, color: '#6EE7B7' },
+    { name: 'United Kingdom', value: 2156, color: '#06B6D4' },
+    { name: 'India', value: 1876, color: '#3B82F6' },
+    { name: 'Canada', value: 1543, color: '#14B8A6' },
     { name: 'Australia', value: 1234, color: '#22C55E' },
-    { name: 'Others', value: 2456, color: '#4ADE80' },
+    { name: 'Others', value: 2456, color: '#34D399' },
   ];
 
   const realtimeActivity = [
@@ -265,25 +268,36 @@ const EdventureDashboard = () => {
     { id: 'settings', label: 'Settings', icon: Settings },
   ];
 
-  const StatCard = ({ icon: Icon, title, value, change, color = "emerald", gradient = false }: { icon: LucideIcon, title: string, value: string, change?: string, color?: string, gradient?: boolean }) => (
-    <div className={`${gradient ? 'bg-gradient-to-br from-emerald-600 via-emerald-500 to-green-500' : 'bg-[#0d2820] border border-emerald-500/20'} rounded-2xl shadow-[0_0_20px_rgba(16,185,129,0.1)] p-6 hover:shadow-[0_0_30px_rgba(16,185,129,0.2)] transition-all duration-300 transform hover:scale-[1.02]`}>
-      <div className="flex items-center justify-between">
-        <div className="flex-1">
-          <p className={`${gradient ? 'text-emerald-100' : 'text-emerald-300/80'} text-sm font-medium mb-1`}>{title}</p>
-          <p className={`${gradient ? 'text-white' : 'text-emerald-100'} text-3xl font-bold mb-2`}>{value}</p>
-          {change && (
-            <p className={`text-sm font-medium flex items-center gap-1 ${gradient ? 'text-emerald-100' : change.startsWith('+') ? 'text-green-400' : 'text-red-400'}`}>
-              <TrendingUp className="h-4 w-4" />
-              {change} from last month
-            </p>
-          )}
-        </div>
-        <div className={`p-4 rounded-2xl ${gradient ? 'bg-white/20 backdrop-blur-sm' : 'bg-emerald-500/10'}`}>
-          <Icon className={`h-8 w-8 ${gradient ? 'text-white' : 'text-emerald-400'}`} />
+  const StatCard = ({ icon: Icon, title, value, change, color = "emerald", gradient = false, gradientIndex = 0 }: { icon: LucideIcon, title: string, value: string, change?: string, color?: string, gradient?: boolean, gradientIndex?: number }) => {
+    const gradients = [
+      'from-emerald-600 via-cyan-600 to-blue-600',
+      'from-blue-600 via-emerald-500 to-cyan-600',
+      'from-cyan-600 via-blue-500 to-emerald-600',
+      'from-emerald-600 via-teal-600 to-cyan-600',
+    ];
+    const gradientClass = gradients[gradientIndex % gradients.length];
+    
+    return (
+      <div className={`${gradient ? `bg-gradient-to-br ${gradientClass}` : 'bg-black/40 backdrop-blur-xl border border-emerald-500/20'} rounded-2xl shadow-[0_0_20px_rgba(34,197,94,0.15)] p-6 hover:shadow-[0_0_30px_rgba(34,197,94,0.25)] transition-all duration-300 transform hover:scale-[1.02] relative overflow-hidden group`}>
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        <div className="flex items-center justify-between relative z-10">
+          <div className="flex-1">
+            <p className={`${gradient ? 'text-white/90' : 'text-gray-400'} text-sm font-medium mb-1`}>{title}</p>
+            <p className={`${gradient ? 'text-white' : 'text-white'} text-3xl font-bold mb-2`}>{value}</p>
+            {change && (
+              <p className={`text-sm font-medium flex items-center gap-1 ${gradient ? 'text-white/90' : change.startsWith('+') ? 'text-emerald-400' : 'text-red-400'}`}>
+                <TrendingUp className="h-4 w-4" />
+                {change} from last month
+              </p>
+            )}
+          </div>
+          <div className={`p-4 rounded-2xl ${gradient ? 'bg-white/20 backdrop-blur-sm' : 'bg-emerald-500/10'}`}>
+            <Icon className={`h-8 w-8 ${gradient ? 'text-white' : 'text-emerald-400'}`} />
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   const statusConfig = {
     delivered: { color: 'bg-green-900/50 text-green-300 border border-green-500/30', icon: CheckCircle },
@@ -309,14 +323,14 @@ const EdventureDashboard = () => {
 
   const ActionButtons = () => (
     <div className="flex items-center gap-1">
-      <button className="p-2 hover:bg-emerald-500/10 rounded-lg transition-colors" title="View">
-        <Eye className="h-4 w-4 text-emerald-400" />
+      <button className="p-2 hover:bg-emerald-500/10 rounded-lg transition-colors group" title="View">
+        <Eye className="h-4 w-4 text-emerald-400 group-hover:text-emerald-300" />
       </button>
-      <button className="p-2 hover:bg-emerald-500/10 rounded-lg transition-colors" title="Edit">
-        <Edit className="h-4 w-4 text-emerald-400" />
+      <button className="p-2 hover:bg-cyan-500/10 rounded-lg transition-colors group" title="Edit">
+        <Edit className="h-4 w-4 text-cyan-400 group-hover:text-cyan-300" />
       </button>
-      <button className="p-2 hover:bg-red-500/10 rounded-lg transition-colors" title="Delete">
-        <Trash2 className="h-4 w-4 text-red-400" />
+      <button className="p-2 hover:bg-red-500/10 rounded-lg transition-colors group" title="Delete">
+        <Trash2 className="h-4 w-4 text-red-400 group-hover:text-red-300" />
       </button>
     </div>
   );
@@ -325,26 +339,34 @@ const EdventureDashboard = () => {
     <div className="space-y-6">
       {/* Key Metrics */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatCard icon={Mail} title="Total Emails Sent" value="124.5K" change="+18.2%" color="emerald" gradient />
-        <StatCard icon={Users} title="Active Startups" value="248" change="+12.5%" color="green" />
-        <StatCard icon={Eye} title="Portal Views" value="892.4K" change="+24.8%" color="teal" />
-        <StatCard icon={Globe} title="Global Reach" value="127" change="+6 countries" color="lime" />
+        <StatCard icon={Mail} title="Total Emails Sent" value="124.5K" change="+18.2%" color="emerald" gradient gradientIndex={0} />
+        <StatCard icon={Users} title="Active Startups" value="248" change="+12.5%" color="green" gradient gradientIndex={1} />
+        <StatCard icon={Eye} title="Portal Views" value="892.4K" change="+24.8%" color="teal" gradient gradientIndex={2} />
+        <StatCard icon={Globe} title="Global Reach" value="127" change="+6 countries" color="lime" gradient gradientIndex={3} />
       </div>
 
       {/* System Health */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {systemMetrics.map((metric, index) => {
           const MetricIcon = metric.icon;
+          const colorClasses = [
+            { border: 'border-emerald-500/20', icon: 'text-emerald-400', text: 'text-gray-400', change: 'text-emerald-400' },
+            { border: 'border-cyan-500/20', icon: 'text-cyan-400', text: 'text-gray-400', change: 'text-cyan-400' },
+            { border: 'border-blue-500/20', icon: 'text-blue-400', text: 'text-gray-400', change: 'text-blue-400' },
+            { border: 'border-emerald-500/20', icon: 'text-emerald-400', text: 'text-gray-400', change: 'text-emerald-400' },
+          ];
+          const colorClass = colorClasses[index % colorClasses.length];
           return (
-            <div key={index} className="bg-[#0d2820] border border-emerald-500/20 rounded-xl shadow-lg p-4">
-              <div className="flex items-center justify-between mb-2">
-                <MetricIcon className="h-5 w-5 text-emerald-400" />
-                <span className={`text-xs font-medium ${metric.change.startsWith('+') ? 'text-green-400' : metric.change.startsWith('-') ? 'text-red-400' : 'text-emerald-400'}`}>
+            <div key={index} className={`bg-black/40 backdrop-blur-xl border ${colorClass.border} rounded-xl shadow-[0_0_15px_rgba(34,197,94,0.1)] p-4 hover:shadow-[0_0_25px_rgba(34,197,94,0.2)] transition-all duration-300 transform hover:scale-[1.02] relative overflow-hidden group`}>
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="flex items-center justify-between mb-2 relative z-10">
+                <MetricIcon className={`h-5 w-5 ${colorClass.icon}`} />
+                <span className={`text-xs font-medium ${metric.change.startsWith('+') ? 'text-emerald-400' : metric.change.startsWith('-') ? 'text-red-400' : colorClass.change}`}>
                   {metric.change}
                 </span>
               </div>
-              <p className="text-sm text-emerald-300/80 mb-1">{metric.name}</p>
-              <p className="text-xl font-bold text-emerald-100">{metric.value}</p>
+              <p className={`text-sm ${colorClass.text} mb-1 relative z-10`}>{metric.name}</p>
+              <p className={`text-xl font-bold text-white relative z-10`}>{metric.value}</p>
             </div>
           );
         })}
@@ -353,12 +375,13 @@ const EdventureDashboard = () => {
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Email Performance */}
-        <div className="bg-[#0d2820] border border-emerald-500/20 rounded-2xl shadow-lg p-6">
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="text-xl font-bold text-emerald-100">Email Campaign Performance</h3>
-            <Download className="h-5 w-5 text-emerald-400 cursor-pointer hover:text-emerald-300" />
+        <div className="bg-black/40 backdrop-blur-xl border border-emerald-500/20 rounded-2xl shadow-[0_0_20px_rgba(34,197,94,0.15)] p-6 hover:shadow-[0_0_30px_rgba(34,197,94,0.25)] transition-all duration-300 relative overflow-hidden group">
+          <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 via-cyan-500/5 to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <div className="flex items-center justify-between mb-6 relative z-10">
+            <h3 className="text-xl font-bold bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent">Email Campaign Performance</h3>
+            <Download className="h-5 w-5 text-emerald-400 cursor-pointer hover:text-emerald-300 transition-colors" />
           </div>
-          <div className="h-80">
+          <div className="h-80 relative z-10">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={emailCampaignData}>
                 <defs>
@@ -367,46 +390,48 @@ const EdventureDashboard = () => {
                     <stop offset="95%" stopColor="#10B981" stopOpacity={0}/>
                   </linearGradient>
                   <linearGradient id="colorOpened" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#34D399" stopOpacity={0.4}/>
-                    <stop offset="95%" stopColor="#34D399" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="#06B6D4" stopOpacity={0.4}/>
+                    <stop offset="95%" stopColor="#06B6D4" stopOpacity={0}/>
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#10B981" opacity={0.1} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#10B981" opacity={0.15} />
                 <XAxis dataKey="month" stroke="#6EE7B7" fontSize={12} />
                 <YAxis stroke="#6EE7B7" fontSize={12} />
                 <Tooltip 
                   contentStyle={{ 
-                    backgroundColor: '#0a1f1a', 
-                    border: '1px solid rgba(16, 185, 129, 0.3)', 
+                    backgroundColor: 'rgba(0, 0, 0, 0.9)', 
+                    border: '1px solid rgba(34, 197, 94, 0.3)', 
                     borderRadius: '12px',
                     color: '#D1FAE5',
-                    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.3)'
+                    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.5)',
+                    backdropFilter: 'blur(10px)'
                   }} 
                 />
-                <Area type="monotone" dataKey="sent" stroke="#10B981" fillOpacity={1} fill="url(#colorSent)" strokeWidth={2} />
-                <Area type="monotone" dataKey="opened" stroke="#34D399" fillOpacity={1} fill="url(#colorOpened)" strokeWidth={2} />
+                <Area type="monotone" dataKey="sent" stroke="#10B981" fillOpacity={1} fill="url(#colorSent)" strokeWidth={3} />
+                <Area type="monotone" dataKey="opened" stroke="#06B6D4" fillOpacity={1} fill="url(#colorOpened)" strokeWidth={3} />
               </AreaChart>
             </ResponsiveContainer>
           </div>
-          <div className="flex justify-center gap-6 mt-4">
+          <div className="flex justify-center gap-6 mt-4 relative z-10">
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-emerald-500"></div>
-              <span className="text-sm text-emerald-300">Sent</span>
+              <div className="w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]"></div>
+              <span className="text-sm text-gray-300">Sent</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-green-400"></div>
-              <span className="text-sm text-emerald-300">Opened</span>
+              <div className="w-3 h-3 rounded-full bg-cyan-500 shadow-[0_0_8px_rgba(6,182,212,0.6)]"></div>
+              <span className="text-sm text-gray-300">Opened</span>
             </div>
           </div>
         </div>
 
         {/* Geographic Distribution */}
-        <div className="bg-[#0d2820] border border-emerald-500/20 rounded-2xl shadow-lg p-6">
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="text-xl font-bold text-emerald-100">Traffic by Country</h3>
-            <Globe className="h-5 w-5 text-emerald-400" />
+        <div className="bg-black/40 backdrop-blur-xl border border-cyan-500/20 rounded-2xl shadow-[0_0_20px_rgba(34,197,94,0.15)] p-6 hover:shadow-[0_0_30px_rgba(34,197,94,0.25)] transition-all duration-300 relative overflow-hidden group">
+          <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 via-emerald-500/5 to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <div className="flex items-center justify-between mb-6 relative z-10">
+            <h3 className="text-xl font-bold bg-gradient-to-r from-cyan-400 via-emerald-400 to-blue-400 bg-clip-text text-transparent">Traffic by Country</h3>
+            <Globe className="h-5 w-5 text-cyan-400" />
           </div>
-          <div className="h-80">
+          <div className="h-80 relative z-10">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
@@ -424,21 +449,22 @@ const EdventureDashboard = () => {
                 </Pie>
                 <Tooltip 
                   contentStyle={{ 
-                    backgroundColor: '#0a1f1a', 
-                    border: '1px solid rgba(16, 185, 129, 0.3)', 
+                    backgroundColor: 'rgba(0, 0, 0, 0.9)', 
+                    border: '1px solid rgba(34, 197, 94, 0.3)', 
                     borderRadius: '12px',
-                    color: '#D1FAE5'
+                    color: '#D1FAE5',
+                    backdropFilter: 'blur(10px)'
                   }} 
                 />
               </PieChart>
             </ResponsiveContainer>
           </div>
-          <div className="grid grid-cols-2 gap-3 mt-4">
+          <div className="grid grid-cols-2 gap-3 mt-4 relative z-10">
             {countryAnalytics.map((item, index) => (
               <div key={index} className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }}></div>
-                <span className="text-sm text-emerald-300">{item.name}</span>
-                <span className="text-sm font-semibold text-emerald-100 ml-auto">{item.value}</span>
+                <div className="w-3 h-3 rounded-full shadow-[0_0_8px_rgba(34,197,94,0.5)]" style={{ backgroundColor: item.color }}></div>
+                <span className="text-sm text-gray-300">{item.name}</span>
+                <span className="text-sm font-semibold text-white ml-auto">{item.value}</span>
               </div>
             ))}
           </div>
@@ -446,43 +472,46 @@ const EdventureDashboard = () => {
       </div>
 
       {/* Real-time Activity */}
-      <div className="bg-gradient-to-br from-emerald-600 via-emerald-500 to-green-500 rounded-2xl shadow-[0_0_30px_rgba(16,185,129,0.3)] p-6 text-white">
-        <div className="flex items-center justify-between mb-4">
+      <div className="bg-gradient-to-br from-emerald-600 via-cyan-600 to-blue-600 rounded-2xl shadow-[0_0_30px_rgba(34,197,94,0.3)] p-6 text-white relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-30"></div>
+        <div className="flex items-center justify-between mb-4 relative z-10">
           <div>
             <h3 className="text-xl font-bold mb-1">Real-time Activity</h3>
             <p className="text-emerald-100 text-sm">Live user engagement tracking</p>
           </div>
           <Activity className="h-6 w-6 animate-pulse" />
         </div>
-        <div className="h-40">
+        <div className="h-40 relative z-10">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={realtimeActivity}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#ffffff" opacity={0.2} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#ffffff" opacity={0.3} />
               <XAxis dataKey="time" stroke="#ffffff" fontSize={11} />
               <YAxis stroke="#ffffff" fontSize={11} />
               <Tooltip 
                 contentStyle={{ 
-                  backgroundColor: '#0a1f1a', 
-                  border: 'none', 
+                  backgroundColor: 'rgba(0, 0, 0, 0.8)', 
+                  border: '1px solid rgba(255, 255, 255, 0.3)', 
                   borderRadius: '8px',
-                  color: '#D1FAE5'
+                  color: '#ffffff',
+                  backdropFilter: 'blur(10px)'
                 }} 
               />
-              <Line type="monotone" dataKey="users" stroke="#ffffff" strokeWidth={3} dot={{ fill: '#ffffff', r: 4 }} />
+              <Line type="monotone" dataKey="users" stroke="#ffffff" strokeWidth={4} dot={{ fill: '#ffffff', r: 5 }} />
             </LineChart>
           </ResponsiveContainer>
         </div>
       </div>
 
       {/* Email Campaign Logs */}
-      <div className="bg-[#0d2820] border border-emerald-500/20 rounded-2xl shadow-lg">
-        <div className="p-6 border-b border-emerald-500/20">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div className="bg-black/40 backdrop-blur-xl border border-emerald-500/20 rounded-2xl shadow-[0_0_20px_rgba(34,197,94,0.15)] relative overflow-hidden">
+        <div className="p-6 border-b border-emerald-500/20 relative">
+          <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 via-cyan-500/5 to-blue-500/5 opacity-30"></div>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 relative z-10">
             <div>
-              <h3 className="text-xl font-bold text-emerald-100 mb-1">Email Campaign Logs</h3>
-              <p className="text-sm text-emerald-300/80">Real-time email delivery status and analytics</p>
+              <h3 className="text-xl font-bold bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent mb-1">Email Campaign Logs</h3>
+              <p className="text-sm text-gray-400">Real-time email delivery status and analytics</p>
             </div>
-            <button className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-emerald-600 to-green-500 text-white rounded-lg hover:from-emerald-500 hover:to-green-400 transition-all shadow-lg">
+            <button className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-emerald-600 via-cyan-600 to-blue-600 text-white rounded-lg hover:from-emerald-500 hover:via-cyan-500 hover:to-blue-500 transition-all shadow-[0_0_15px_rgba(34,197,94,0.4)] hover:shadow-[0_0_25px_rgba(34,197,94,0.6)] transform hover:scale-105">
               <Send className="h-4 w-4" />
               New Campaign
             </button>
@@ -491,28 +520,28 @@ const EdventureDashboard = () => {
         <div className="overflow-x-auto">
           <table className="w-full min-w-[900px]">
             <thead>
-              <tr className="border-b border-emerald-500/20 bg-[#0a1f1a]">
-                <th className="text-left py-4 px-6 text-sm font-semibold text-emerald-300">Campaign ID</th>
-                <th className="text-left py-4 px-6 text-sm font-semibold text-emerald-300">Campaign Name</th>
-                <th className="text-left py-4 px-6 text-sm font-semibold text-emerald-300">Recipients</th>
-                <th className="text-left py-4 px-6 text-sm font-semibold text-emerald-300">Status</th>
-                <th className="text-left py-4 px-6 text-sm font-semibold text-emerald-300">Delivery</th>
-                <th className="text-left py-4 px-6 text-sm font-semibold text-emerald-300">Open Rate</th>
-                <th className="text-left py-4 px-6 text-sm font-semibold text-emerald-300">Time</th>
-                <th className="text-left py-4 px-6 text-sm font-semibold text-emerald-300">Actions</th>
+              <tr className="border-b border-emerald-500/20 bg-black/30 backdrop-blur-sm">
+                <th className="text-left py-4 px-6 text-sm font-semibold text-gray-300">Campaign ID</th>
+                <th className="text-left py-4 px-6 text-sm font-semibold text-gray-300">Campaign Name</th>
+                <th className="text-left py-4 px-6 text-sm font-semibold text-gray-300">Recipients</th>
+                <th className="text-left py-4 px-6 text-sm font-semibold text-gray-300">Status</th>
+                <th className="text-left py-4 px-6 text-sm font-semibold text-gray-300">Delivery</th>
+                <th className="text-left py-4 px-6 text-sm font-semibold text-gray-300">Open Rate</th>
+                <th className="text-left py-4 px-6 text-sm font-semibold text-gray-300">Time</th>
+                <th className="text-left py-4 px-6 text-sm font-semibold text-gray-300">Actions</th>
               </tr>
             </thead>
             <tbody>
               {emailLogs.map((log) => (
-                <tr key={log.id} className="border-b border-emerald-500/10 hover:bg-emerald-500/5 transition-colors">
-                  <td className="py-4 px-6 text-sm font-mono text-emerald-100">{log.id}</td>
+                <tr key={log.id} className="border-b border-emerald-500/10 hover:bg-emerald-500/5 transition-colors group">
+                  <td className="py-4 px-6 text-sm font-mono text-gray-300">{log.id}</td>
                   <td className="py-4 px-6">
                     <div className="flex items-center gap-2">
-                      <Mail className="h-4 w-4 text-emerald-400" />
-                      <span className="text-sm font-medium text-emerald-100">{log.campaign}</span>
+                      <Mail className="h-4 w-4 text-emerald-400 group-hover:text-emerald-300 transition-colors" />
+                      <span className="text-sm font-medium text-white">{log.campaign}</span>
                     </div>
                   </td>
-                  <td className="py-4 px-6 text-sm text-emerald-300">{log.recipients.toLocaleString()}</td>
+                  <td className="py-4 px-6 text-sm text-gray-300">{log.recipients.toLocaleString()}</td>
                   <td className="py-4 px-6">{getStatusBadge(log.status)}</td>
                   <td className="py-4 px-6">
                     <div className="text-sm">
@@ -529,9 +558,9 @@ const EdventureDashboard = () => {
                     </div>
                   </td>
                   <td className="py-4 px-6">
-                    <span className="text-sm font-semibold text-emerald-100">{log.openRate}</span>
+                    <span className="text-sm font-semibold text-white">{log.openRate}</span>
                   </td>
-                  <td className="py-4 px-6 text-sm text-emerald-300">{log.time}</td>
+                  <td className="py-4 px-6 text-sm text-gray-300">{log.time}</td>
                   <td className="py-4 px-6"><ActionButtons /></td>
                 </tr>
               ))}
@@ -546,50 +575,50 @@ const EdventureDashboard = () => {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
         <div>
-          <h2 className="text-2xl font-bold text-emerald-100 mb-1">Blog Management</h2>
-          <p className="text-sm text-emerald-300/80">Create and manage your content</p>
+          <h2 className="text-2xl font-bold bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent mb-1">Blog Management</h2>
+          <p className="text-sm text-gray-400">Create and manage your content</p>
         </div>
-        <button className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-emerald-600 to-green-500 text-white rounded-xl hover:from-emerald-500 hover:to-green-400 transition-all shadow-lg">
+        <button className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-emerald-600 via-cyan-600 to-blue-600 text-white rounded-xl hover:from-emerald-500 hover:via-cyan-500 hover:to-blue-500 transition-all shadow-[0_0_20px_rgba(34,197,94,0.4)] hover:shadow-[0_0_30px_rgba(34,197,94,0.6)] transform hover:scale-105">
           <PenTool className="h-5 w-5" />
           Create New Post
         </button>
       </div>
 
-      <div className="bg-[#0d2820] border border-emerald-500/20 rounded-2xl shadow-lg overflow-hidden">
+      <div className="bg-black/40 backdrop-blur-xl border border-emerald-500/20 rounded-2xl shadow-[0_0_20px_rgba(34,197,94,0.15)] overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full min-w-[800px]">
             <thead>
-              <tr className="border-b border-emerald-500/20 bg-[#0a1f1a]">
-                <th className="text-left py-4 px-6 text-sm font-semibold text-emerald-300">Title</th>
-                <th className="text-left py-4 px-6 text-sm font-semibold text-emerald-300">Author</th>
-                <th className="text-left py-4 px-6 text-sm font-semibold text-emerald-300">Date</th>
-                <th className="text-left py-4 px-6 text-sm font-semibold text-emerald-300">Status</th>
-                <th className="text-left py-4 px-6 text-sm font-semibold text-emerald-300">Views</th>
-                <th className="text-left py-4 px-6 text-sm font-semibold text-emerald-300">Comments</th>
-                <th className="text-left py-4 px-6 text-sm font-semibold text-emerald-300">Actions</th>
+              <tr className="border-b border-emerald-500/20 bg-black/30 backdrop-blur-sm">
+                <th className="text-left py-4 px-6 text-sm font-semibold text-gray-300">Title</th>
+                <th className="text-left py-4 px-6 text-sm font-semibold text-gray-300">Author</th>
+                <th className="text-left py-4 px-6 text-sm font-semibold text-gray-300">Date</th>
+                <th className="text-left py-4 px-6 text-sm font-semibold text-gray-300">Status</th>
+                <th className="text-left py-4 px-6 text-sm font-semibold text-gray-300">Views</th>
+                <th className="text-left py-4 px-6 text-sm font-semibold text-gray-300">Comments</th>
+                <th className="text-left py-4 px-6 text-sm font-semibold text-gray-300">Actions</th>
               </tr>
             </thead>
             <tbody>
               {blogData.map((blog) => (
-                <tr key={blog.id} className="border-b border-emerald-500/10 hover:bg-emerald-500/5 transition-colors">
+                <tr key={blog.id} className="border-b border-emerald-500/10 hover:bg-emerald-500/5 transition-colors group">
                   <td className="py-4 px-6">
                     <div className="flex items-center gap-2">
-                      <FileText className="h-4 w-4 text-emerald-400" />
-                      <span className="text-sm font-medium text-emerald-100">{blog.title}</span>
+                      <FileText className="h-4 w-4 text-emerald-400 group-hover:text-emerald-300 transition-colors" />
+                      <span className="text-sm font-medium text-white">{blog.title}</span>
                     </div>
                   </td>
-                  <td className="py-4 px-6 text-sm text-emerald-300">{blog.author}</td>
-                  <td className="py-4 px-6 text-sm text-emerald-300">{blog.date}</td>
+                  <td className="py-4 px-6 text-sm text-gray-300">{blog.author}</td>
+                  <td className="py-4 px-6 text-sm text-gray-300">{blog.date}</td>
                   <td className="py-4 px-6">{getStatusBadge(blog.status)}</td>
                   <td className="py-4 px-6">
-                    <div className="flex items-center gap-2 text-emerald-100">
-                      <Eye className="h-4 w-4 text-emerald-400" />
+                    <div className="flex items-center gap-2 text-white">
+                      <Eye className="h-4 w-4 text-emerald-400 group-hover:text-emerald-300 transition-colors" />
                       <span className="text-sm">{blog.views.toLocaleString()}</span>
                     </div>
                   </td>
                   <td className="py-4 px-6">
-                    <div className="flex items-center gap-2 text-emerald-100">
-                      <MessageSquare className="h-4 w-4 text-emerald-400" />
+                    <div className="flex items-center gap-2 text-white">
+                      <MessageSquare className="h-4 w-4 text-cyan-400 group-hover:text-cyan-300 transition-colors" />
                       <span className="text-sm">{blog.comments}</span>
                     </div>
                   </td>
@@ -605,12 +634,13 @@ const EdventureDashboard = () => {
 
   const renderGenericTab = (title:any, description:any, icon:any) => (
     <div className="space-y-6">
-      <div className="bg-gradient-to-br from-emerald-600 via-emerald-500 to-green-500 rounded-2xl shadow-[0_0_30px_rgba(16,185,129,0.3)] p-8 text-white text-center">
-        <div className="flex justify-center mb-4">
-          {React.createElement(icon, { className: "h-16 w-16" })}
+      <div className="bg-gradient-to-br from-emerald-600 via-cyan-600 to-blue-600 rounded-2xl shadow-[0_0_30px_rgba(34,197,94,0.3)] p-8 text-white text-center relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-30"></div>
+        <div className="flex justify-center mb-4 relative z-10">
+          {React.createElement(icon, { className: "h-16 w-16 drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]" })}
         </div>
-        <h2 className="text-3xl font-bold mb-2">{title}</h2>
-        <p className="text-emerald-100">{description}</p>
+        <h2 className="text-3xl font-bold mb-2 relative z-10">{title}</h2>
+        <p className="text-emerald-100 relative z-10">{description}</p>
       </div>
     </div>
   );
@@ -645,25 +675,28 @@ const EdventureDashboard = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gradient-to-br from-[#0a1f1a] via-[#0d2820] to-[#0f3528] overflow-hidden">
+    <div className="flex h-screen bg-gradient-to-br from-slate-950 via-gray-950 to-black overflow-hidden relative">
+      {/* Animated Background Orbs */}
+      <div className="absolute top-0 left-0 w-1/3 h-1/3 bg-emerald-500/8 rounded-full blur-3xl animate-float"></div>
+      <div className="absolute bottom-0 right-0 w-1/3 h-1/3 bg-blue-500/8 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }}></div>
+      <div className="absolute top-1/2 right-1/4 w-1/4 h-1/4 bg-cyan-500/6 rounded-full blur-3xl animate-float" style={{ animationDelay: '4s' }}></div>
       {/* Sidebar */}
-      <aside className={`${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 fixed lg:static inset-y-0 left-0 z-50 w-64 bg-[#0a1f1a] border-r border-emerald-500/20 transition-transform duration-300 ease-in-out`}>
+      <aside className={`${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 fixed lg:static inset-y-0 left-0 z-50 w-64 bg-black/40 backdrop-blur-xl border-r border-emerald-500/20 transition-transform duration-300 ease-in-out relative`}>
         <div className="flex flex-col h-full">
           {/* Logo */}
-          <div className="p-6 border-b border-emerald-500/20">
-            <div className="flex items-center gap-3">
-              {/* <div className="w-10 h-10 flex items-center justify-center"> */}
-                {/* <Zap className="h-6 w-6 text-white" /> */}
-                <Image
-                  alt="Edventure Park Logo"
-                  width={62}
-                  height={82} 
-                  src="/logo.png"
-                />
-              {/* </div> */}
+          <div className="p-6 border-b border-emerald-500/20 relative">
+            <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 via-cyan-500/5 to-blue-500/5 opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
+            <div className="flex items-center gap-3 relative z-10">
+              <Image
+                alt="Edventure Park Logo"
+                width={62}
+                height={82} 
+                src="/logo.png"
+                className="drop-shadow-[0_0_10px_rgba(34,197,94,0.3)]"
+              />
               <div>
-                <h1 className="text-xl font-bold text-emerald-100">EVP</h1>
-                <p className="text-xs text-emerald-400">CMS Platform</p>
+                <h1 className="text-xl font-bold bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent">EVP</h1>
+                <p className="text-xs text-gray-400">CMS Platform</p>
               </div>
             </div>
           </div>
@@ -679,15 +712,18 @@ const EdventureDashboard = () => {
                     setActiveTab(item.id);
                     setSidebarOpen(false);
                   }}
-                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
+                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all relative overflow-hidden group ${
                     activeTab === item.id
-                      ? 'bg-gradient-to-r from-emerald-600 to-green-500 text-white shadow-lg'
-                      : 'text-emerald-300 hover:bg-emerald-500/10'
+                      ? 'bg-gradient-to-r from-emerald-600 via-cyan-600 to-blue-600 text-white shadow-[0_0_15px_rgba(34,197,94,0.3)]'
+                      : 'text-gray-300 hover:bg-emerald-500/10 hover:text-emerald-300'
                   }`}
                 >
                   <Icon className="h-5 w-5" />
                   <span className="font-medium">{item.label}</span>
-                  {activeTab === item.id && <ChevronRight className="h-4 w-4 ml-auto" />}
+                  {activeTab === item.id && <ChevronRight className="h-4 w-4 ml-auto animate-pulse" />}
+                  {activeTab !== item.id && (
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  )}
                 </button>
               );
             })}
@@ -697,10 +733,11 @@ const EdventureDashboard = () => {
           <div className="p-4 border-t border-emerald-500/20">
             <button 
               onClick={() => setAuthenticated(false)}
-              className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-400 hover:bg-red-500/10 transition-all"
+              className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:bg-red-500/10 hover:text-red-400 transition-all relative overflow-hidden group"
             >
-              <LogOut className="h-5 w-5" />
-              <span className="font-medium">Logout</span>
+              <div className="absolute inset-0 bg-gradient-to-r from-red-500/5 to-red-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <LogOut className="h-5 w-5 relative z-10" />
+              <span className="font-medium relative z-10">Logout</span>
             </button>
           </div>
         </div>
@@ -709,33 +746,33 @@ const EdventureDashboard = () => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
-        <header className="bg-[#0a1f1a] border-b border-emerald-500/20 p-4 lg:p-6">
+        <header className="bg-black/40 backdrop-blur-xl border-b border-emerald-500/20 p-4 lg:p-6 relative">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <button
                 onClick={() => setSidebarOpen(!sidebarOpen)}
-                className="lg:hidden p-2 hover:bg-emerald-500/10 rounded-lg transition-colors"
+                className="lg:hidden p-2 hover:bg-emerald-500/10 rounded-lg transition-colors group"
               >
-                {sidebarOpen ? <X className="h-6 w-6 text-emerald-400" /> : <Menu className="h-6 w-6 text-emerald-400" />}
+                {sidebarOpen ? <X className="h-6 w-6 text-emerald-400 group-hover:text-emerald-300" /> : <Menu className="h-6 w-6 text-emerald-400 group-hover:text-emerald-300" />}
               </button>
               <div>
-                <h2 className="text-xl lg:text-2xl font-bold text-emerald-100">
+                <h2 className="text-xl lg:text-2xl font-bold bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent">
                   {sidebarItems.find(item => item.id === activeTab)?.label || 'Dashboard'}
                 </h2>
-                <p className="text-sm text-emerald-300/80 hidden sm:block">Welcome back, Admin</p>
+                <p className="text-sm text-gray-400 hidden sm:block">Welcome back, Admin</p>
               </div>
             </div>
             
             <div className="flex items-center gap-2 lg:gap-4">
-              <button className="relative p-2 hover:bg-emerald-500/10 rounded-lg transition-colors">
-                <Search className="h-5 w-5 text-emerald-400" />
+              <button className="relative p-2 hover:bg-emerald-500/10 rounded-lg transition-colors group">
+                <Search className="h-5 w-5 text-gray-400 group-hover:text-emerald-400 transition-colors" />
               </button>
-              <button className="relative p-2 hover:bg-emerald-500/10 rounded-lg transition-colors">
-                <Bell className="h-5 w-5 text-emerald-400" />
-                <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+              <button className="relative p-2 hover:bg-emerald-500/10 rounded-lg transition-colors group">
+                <Bell className="h-5 w-5 text-gray-400 group-hover:text-emerald-400 transition-colors" />
+                <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.8)]"></span>
               </button>
               <div className="hidden sm:flex items-center gap-3 pl-4 border-l border-emerald-500/20">
-                <div className="w-10 h-10 bg-gradient-to-br from-emerald-600 to-green-500 rounded-full flex items-center justify-center">
+                <div className="w-10 h-10 bg-gradient-to-br from-emerald-600 via-cyan-600 to-blue-600 rounded-full flex items-center justify-center shadow-[0_0_12px_rgba(34,197,94,0.4)]">
                   <span className="text-white font-bold">A</span>
                 </div>
               </div>
