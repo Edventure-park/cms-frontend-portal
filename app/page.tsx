@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { 
   XAxis, 
   YAxis, 
@@ -20,6 +20,7 @@ import {
   TrendingUp,
   Mail,
   Eye,
+  EyeOff,
   Search,
   Bell,
   Settings,
@@ -49,10 +50,16 @@ import {
   ChevronRight,
   Download,
   Lock,
-  LucideIcon
+  LucideIcon,
+  Calendar,
+  Tag,
+  FolderOpen,
+  FileUp,
+  Upload,
+  AtSign,
+  AlignLeft
 } from 'lucide-react';
 import Image from 'next/image';
-import BlogManagement from '@/components/Blog';
 
 const EdventureDashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -60,9 +67,66 @@ const EdventureDashboard = () => {
   const [authenticated, setAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  
+  // Email Campaign State
+  const [emailCampaign, setEmailCampaign] = useState({
+    subject: '',
+    body: '',
+    title: '',
+    slug: '',
+    excerpt: '',
+    content: '',
+    category: '',
+    tags: '',
+    bulkEmails: '',
+    scheduledAt: '',
+    sendImmediately: true
+  });
+
+  // Blog Post State
+  const [blogViewMode, setBlogViewMode] = useState<'list' | 'create' | 'edit'>('list');
+  const [editingBlogId, setEditingBlogId] = useState<number | null>(null);
+  const [blogPost, setBlogPost] = useState({
+    title: '',
+    author: '',
+    date: new Date().toISOString().split('T')[0],
+    status: 'draft' as 'published' | 'draft',
+    views: 0,
+    comments: 0,
+    content: '',
+    excerpt: '',
+    slug: '',
+    category: '',
+    tags: ''
+  });
+
+  type StatusType = 'delivered' | 'queued' | 'failed' | 'published' | 'draft' | 'processing';
+
+  type BlogPost = {
+    id: number;
+    title: string;
+    author: string;
+    date: string;
+    status: StatusType;
+    views: number;
+    comments: number;
+    content: string;
+    excerpt: string;
+    slug: string;
+    category: string;
+    tags: string;
+    visible: boolean;
+  };
+  
+  const [blogData, setBlogData] = useState<BlogPost[]>([
+    { id: 1, title: 'Top 10 Strategies for Startup Success', author: 'Sarah Johnson', date: '2024-10-28', status: 'published', views: 8943, comments: 127, content: '', excerpt: '', slug: '', category: '', tags: '', visible: true },
+    { id: 2, title: 'Securing Seed Funding in 2024', author: 'Michael Chen', date: '2024-10-27', status: 'published', views: 6721, comments: 94, content: '', excerpt: '', slug: '', category: '', tags: '', visible: true },
+    { id: 3, title: 'Building a Scalable Business Model', author: 'Emma Wilson', date: '2024-10-26', status: 'draft', views: 0, comments: 0, content: '', excerpt: '', slug: '', category: '', tags: '', visible: true },
+    { id: 4, title: 'AI Tools for Modern Entrepreneurs', author: 'David Martinez', date: '2024-10-25', status: 'published', views: 12456, comments: 203, content: '', excerpt: '', slug: '', category: '', tags: '', visible: true },
+  ]);
 
   const correctPassword = "1234"; 
-
+  
   const handleLogin = (e:any) => {
     e.preventDefault();
     if (password === correctPassword) {
@@ -284,15 +348,13 @@ const EdventureDashboard = () => {
   };
 
   const statusConfig = {
-  delivered: { color: 'bg-green-900/50 text-green-300 border border-green-500/30', icon: CheckCircle },
-  queued: { color: 'bg-blue-900/50 text-blue-300 border border-blue-500/30', icon: Clock },
-  failed: { color: 'bg-red-900/50 text-red-300 border border-red-500/30', icon: XCircle },
-  published: { color: 'bg-green-900/50 text-green-300 border border-green-500/30', icon: CheckCircle },
-  draft: { color: 'bg-gray-700/50 text-gray-300 border border-gray-500/30', icon: Edit },
-  processing: { color: 'bg-yellow-900/50 text-yellow-300 border border-yellow-500/30', icon: Activity },
-};
-
-  type StatusType = keyof typeof statusConfig;
+    delivered: { color: 'bg-green-900/50 text-green-300 border border-green-500/30', icon: CheckCircle },
+    queued: { color: 'bg-blue-900/50 text-blue-300 border border-blue-500/30', icon: Clock },
+    failed: { color: 'bg-red-900/50 text-red-300 border border-red-500/30', icon: XCircle },
+    published: { color: 'bg-green-900/50 text-green-300 border border-green-500/30', icon: CheckCircle },
+    draft: { color: 'bg-gray-700/50 text-gray-300 border border-gray-500/30', icon: Edit },
+    processing: { color: 'bg-yellow-900/50 text-yellow-300 border border-yellow-500/30', icon: Activity },
+  };
 
   const getStatusBadge = (status: StatusType) => {
     const config = statusConfig[status] || statusConfig.queued;
@@ -556,6 +618,745 @@ const EdventureDashboard = () => {
     </div>
   );
 
+  const handleBlogPostChange = (field: string, value: any) => {
+    setBlogPost(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleCreateNewPost = () => {
+    setBlogPost({
+      title: '',
+      author: '',
+      date: new Date().toISOString().split('T')[0],
+      status: 'draft',
+      views: 0,
+      comments: 0,
+      content: '',
+      excerpt: '',
+      slug: '',
+      category: '',
+      tags: ''
+    });
+    setEditingBlogId(null);
+    setBlogViewMode('create');
+  };
+
+  const handleEditPost = (blog: BlogPost) => {
+    setBlogPost({
+      title: blog.title,
+      author: blog.author,
+      date: blog.date,
+      status: (blog.status === 'published' || blog.status === 'draft') ? blog.status : 'draft',
+      views: blog.views,
+      comments: blog.comments,
+      content: blog.content || '',
+      excerpt: blog.excerpt || '',
+      slug: blog.slug || '',
+      category: blog.category || '',
+      tags: blog.tags || ''
+    });
+    setEditingBlogId(blog.id);
+    setBlogViewMode('edit');
+  };
+
+  const handleBlogPostSubmit = (e: any) => {
+    e.preventDefault();
+    
+    if (editingBlogId) {
+      // Update existing blog
+      setBlogData(prev => prev.map(blog => 
+        blog.id === editingBlogId 
+          ? {
+              ...blog,
+              ...blogPost,
+              id: editingBlogId,
+              tags: blogPost.tags
+            }
+          : blog
+      ));
+    } else {
+      // Create new blog
+      const newBlog: BlogPost = {
+        ...blogPost,
+        id: Date.now(),
+        tags: blogPost.tags,
+        visible: true
+      };
+      setBlogData(prev => [...prev, newBlog]);
+    }
+    
+    // Reset form and go back to list
+    setBlogPost({
+      title: '',
+      author: '',
+      date: new Date().toISOString().split('T')[0],
+      status: 'draft',
+      views: 0,
+      comments: 0,
+      content: '',
+      excerpt: '',
+      slug: '',
+      category: '',
+      tags: ''
+    });
+    setEditingBlogId(null);
+    setBlogViewMode('list');
+  };
+
+  const handleDeletePost = (id: number) => {
+    if (confirm('Are you sure you want to delete this blog post?')) {
+      setBlogData(prev => prev.filter(blog => blog.id !== id));
+    }
+  };
+
+  const handleToggleVisibility = (id: number) => {
+    setBlogData(prev => prev.map(blog => 
+      blog.id === id 
+        ? { ...blog, visible: !blog.visible }
+        : blog
+    ));
+  };
+
+  const renderBlogPostForm = () => (
+    <div className="space-y-6">
+      <div className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
+        <div>
+          <h2 className="text-2xl font-bold bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent mb-1">
+            {editingBlogId ? 'Edit Blog Post' : 'Create New Blog Post'}
+          </h2>
+          <p className="text-sm text-gray-400">Fill in the details below to {editingBlogId ? 'update' : 'create'} your blog post</p>
+        </div>
+        <button
+          onClick={() => setBlogViewMode('list')}
+          className="flex items-center gap-2 px-6 py-3 bg-black/40 border border-gray-500/20 text-gray-300 rounded-xl hover:bg-gray-500/10 hover:border-gray-500/40 transition-all"
+        >
+          <X className="h-5 w-5" />
+          Cancel
+        </button>
+      </div>
+
+      <form onSubmit={handleBlogPostSubmit} className="space-y-6">
+        {/* Basic Information Section */}
+        <div className="bg-black/40 backdrop-blur-xl border border-emerald-500/20 rounded-2xl shadow-[0_0_20px_rgba(34,197,94,0.15)] p-6">
+          <div className="flex items-center gap-3 mb-6">
+            <FileText className="h-6 w-6 text-emerald-400" />
+            <h3 className="text-xl font-bold bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent">Basic Information</h3>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Title */}
+            <div className="md:col-span-2">
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2">
+                <PenTool className="h-4 w-4 text-emerald-400" />
+                Title *
+              </label>
+              <input
+                type="text"
+                value={blogPost.title}
+                onChange={(e) => handleBlogPostChange('title', e.target.value)}
+                placeholder="Enter blog post title"
+                className="w-full px-4 py-3 bg-black/40 border border-emerald-500/20 rounded-xl focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 text-white placeholder-gray-500 transition-all outline-none"
+                required
+              />
+            </div>
+
+            {/* Author */}
+            <div>
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2">
+                <Users className="h-4 w-4 text-emerald-400" />
+                Author *
+              </label>
+              <input
+                type="text"
+                value={blogPost.author}
+                onChange={(e) => handleBlogPostChange('author', e.target.value)}
+                placeholder="Enter author name"
+                className="w-full px-4 py-3 bg-black/40 border border-emerald-500/20 rounded-xl focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 text-white placeholder-gray-500 transition-all outline-none"
+                required
+              />
+            </div>
+
+            {/* Date */}
+            <div>
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2">
+                <Calendar className="h-4 w-4 text-emerald-400" />
+                Date *
+              </label>
+              <input
+                type="date"
+                value={blogPost.date}
+                onChange={(e) => handleBlogPostChange('date', e.target.value)}
+                className="w-full px-4 py-3 bg-black/40 border border-emerald-500/20 rounded-xl focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 text-white transition-all outline-none"
+                required
+              />
+            </div>
+
+            {/* Status */}
+            <div>
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2">
+                <CheckCircle className="h-4 w-4 text-emerald-400" />
+                Status *
+              </label>
+              <select
+                value={blogPost.status}
+                onChange={(e) => handleBlogPostChange('status', e.target.value)}
+                className="w-full px-4 py-3 bg-black/40 border border-emerald-500/20 rounded-xl focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 text-white transition-all outline-none"
+                required
+              >
+                <option value="draft">Draft</option>
+                <option value="published">Published</option>
+              </select>
+            </div>
+
+            {/* Views - Admin only field */}
+            <div>
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2">
+                <Eye className="h-4 w-4 text-emerald-400" />
+                Views (Admin)
+              </label>
+              <input
+                type="number"
+                value={blogPost.views}
+                onChange={(e) => handleBlogPostChange('views', parseInt(e.target.value) || 0)}
+                min="0"
+                className="w-full px-4 py-3 bg-black/40 border border-emerald-500/20 rounded-xl focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 text-white transition-all outline-none"
+              />
+            </div>
+
+            {/* Comments - Admin only field */}
+            <div>
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2">
+                <MessageSquare className="h-4 w-4 text-emerald-400" />
+                Comments (Admin)
+              </label>
+              <input
+                type="number"
+                value={blogPost.comments}
+                onChange={(e) => handleBlogPostChange('comments', parseInt(e.target.value) || 0)}
+                min="0"
+                className="w-full px-4 py-3 bg-black/40 border border-emerald-500/20 rounded-xl focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 text-white transition-all outline-none"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Content Section */}
+        <div className="bg-black/40 backdrop-blur-xl border border-cyan-500/20 rounded-2xl shadow-[0_0_20px_rgba(34,197,94,0.15)] p-6">
+          <div className="flex items-center gap-3 mb-6">
+            <AlignLeft className="h-6 w-6 text-cyan-400" />
+            <h3 className="text-xl font-bold bg-gradient-to-r from-cyan-400 via-emerald-400 to-blue-400 bg-clip-text text-transparent">Content</h3>
+          </div>
+          
+          <div className="space-y-6">
+            {/* Excerpt */}
+            <div>
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2">
+                <AlignLeft className="h-4 w-4 text-cyan-400" />
+                Excerpt / Summary
+              </label>
+              <textarea
+                value={blogPost.excerpt}
+                onChange={(e) => handleBlogPostChange('excerpt', e.target.value)}
+                placeholder="Brief summary or excerpt of the blog post"
+                rows={3}
+                className="w-full px-4 py-3 bg-black/40 border border-cyan-500/20 rounded-xl focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500/50 text-white placeholder-gray-500 transition-all outline-none resize-y"
+              />
+            </div>
+
+            {/* Full Content */}
+            <div>
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2">
+                <FileText className="h-4 w-4 text-cyan-400" />
+                Full Content *
+              </label>
+              <textarea
+                value={blogPost.content}
+                onChange={(e) => handleBlogPostChange('content', e.target.value)}
+                placeholder="Enter the full blog post content. HTML is supported for formatting."
+                rows={12}
+                className="w-full px-4 py-3 bg-black/40 border border-cyan-500/20 rounded-xl focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500/50 text-white placeholder-gray-500 transition-all outline-none resize-y"
+                required
+              />
+              <p className="text-xs text-gray-500 mt-2">HTML is supported for rich formatting</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Additional Metadata Section */}
+        <div className="bg-black/40 backdrop-blur-xl border border-blue-500/20 rounded-2xl shadow-[0_0_20px_rgba(34,197,94,0.15)] p-6">
+          <div className="flex items-center gap-3 mb-6">
+            <Tag className="h-6 w-6 text-blue-400" />
+            <h3 className="text-xl font-bold bg-gradient-to-r from-blue-400 via-cyan-400 to-emerald-400 bg-clip-text text-transparent">Additional Metadata</h3>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Slug */}
+            <div>
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2">
+                <FileText className="h-4 w-4 text-blue-400" />
+                Slug (URL-friendly)
+              </label>
+              <input
+                type="text"
+                value={blogPost.slug}
+                onChange={(e) => handleBlogPostChange('slug', e.target.value)}
+                placeholder="e.g., my-blog-post-title"
+                className="w-full px-4 py-3 bg-black/40 border border-blue-500/20 rounded-xl focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 text-white placeholder-gray-500 transition-all outline-none"
+              />
+            </div>
+
+            {/* Category */}
+            <div>
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2">
+                <FolderOpen className="h-4 w-4 text-blue-400" />
+                Category
+              </label>
+              <input
+                type="text"
+                value={blogPost.category}
+                onChange={(e) => handleBlogPostChange('category', e.target.value)}
+                placeholder="e.g., Technology, Business"
+                className="w-full px-4 py-3 bg-black/40 border border-blue-500/20 rounded-xl focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 text-white placeholder-gray-500 transition-all outline-none"
+              />
+            </div>
+
+            {/* Tags */}
+            <div className="md:col-span-2">
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2">
+                <Tag className="h-4 w-4 text-blue-400" />
+                Tags (comma-separated)
+              </label>
+              <input
+                type="text"
+                value={blogPost.tags}
+                onChange={(e) => handleBlogPostChange('tags', e.target.value)}
+                placeholder="e.g., react, javascript, web-development"
+                className="w-full px-4 py-3 bg-black/40 border border-blue-500/20 rounded-xl focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 text-white placeholder-gray-500 transition-all outline-none"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex flex-col sm:flex-row gap-4">
+          <button
+            type="submit"
+            className="flex-1 flex items-center justify-center gap-3 px-6 py-4 bg-gradient-to-r from-emerald-600 via-cyan-600 to-blue-600 text-white rounded-xl hover:from-emerald-500 hover:via-cyan-500 hover:to-blue-500 transition-all shadow-[0_0_20px_rgba(34,197,94,0.4)] hover:shadow-[0_0_30px_rgba(34,197,94,0.6)] transform hover:scale-105"
+          >
+            <CheckCircle className="h-5 w-5" />
+            <span>{editingBlogId ? 'Update Post' : 'Create Post'}</span>
+          </button>
+          
+          <button
+            type="button"
+            onClick={() => setBlogViewMode('list')}
+            className="flex-1 flex items-center justify-center gap-3 px-6 py-4 bg-black/40 border border-gray-500/20 text-gray-300 rounded-xl hover:bg-gray-500/10 hover:border-gray-500/40 transition-all"
+          >
+            <X className="h-5 w-5" />
+            <span>Cancel</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  );
+
+  const renderBlogs = () => {
+    if (blogViewMode !== 'list') {
+      return renderBlogPostForm();
+    }
+
+    return (
+      <div className="space-y-6">
+        <div className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
+          <div>
+            <h2 className="text-2xl font-bold bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent mb-1">Blog Management</h2>
+            <p className="text-sm text-gray-400">Create and manage your content</p>
+          </div>
+          <button 
+            onClick={handleCreateNewPost}
+            className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-emerald-600 via-cyan-600 to-blue-600 text-white rounded-xl hover:from-emerald-500 hover:via-cyan-500 hover:to-blue-500 transition-all shadow-[0_0_20px_rgba(34,197,94,0.4)] hover:shadow-[0_0_30px_rgba(34,197,94,0.6)] transform hover:scale-105"
+          >
+            <PenTool className="h-5 w-5" />
+            Create New Post
+          </button>
+        </div>
+
+      <div className="bg-black/40 backdrop-blur-xl border border-emerald-500/20 rounded-2xl shadow-[0_0_20px_rgba(34,197,94,0.15)] overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[800px]">
+            <thead>
+              <tr className="border-b border-emerald-500/20 bg-black/30 backdrop-blur-sm">
+                <th className="text-left py-4 px-6 text-sm font-semibold text-gray-300">Title</th>
+                <th className="text-left py-4 px-6 text-sm font-semibold text-gray-300">Author</th>
+                <th className="text-left py-4 px-6 text-sm font-semibold text-gray-300">Date</th>
+                <th className="text-left py-4 px-6 text-sm font-semibold text-gray-300">Status</th>
+                <th className="text-left py-4 px-6 text-sm font-semibold text-gray-300">Views</th>
+                <th className="text-left py-4 px-6 text-sm font-semibold text-gray-300">Comments</th>
+                <th className="text-left py-4 px-6 text-sm font-semibold text-gray-300">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {blogData.map((blog) => (
+                <tr key={blog.id} className={`border-b border-emerald-500/10 hover:bg-emerald-500/5 transition-colors group ${!blog.visible ? 'opacity-50' : ''}`}>
+                  <td className="py-4 px-6">
+                    <div className="flex items-center gap-2">
+                      <FileText className="h-4 w-4 text-emerald-400 group-hover:text-emerald-300 transition-colors" />
+                      <span className={`text-sm font-medium ${blog.visible ? 'text-white' : 'text-gray-500'}`}>
+                        {blog.title}
+                        {!blog.visible && <span className="ml-2 text-xs text-gray-500">(Hidden)</span>}
+                      </span>
+                    </div>
+                  </td>
+                  <td className="py-4 px-6 text-sm text-gray-300">{blog.author}</td>
+                  <td className="py-4 px-6 text-sm text-gray-300">{blog.date}</td>
+                  <td className="py-4 px-6">{getStatusBadge(blog.status)}</td>
+                  <td className="py-4 px-6">
+                    <div className="flex items-center gap-2 text-white">
+                      <Eye className="h-4 w-4 text-emerald-400 group-hover:text-emerald-300 transition-colors" />
+                      <span className="text-sm">{blog.views.toLocaleString()}</span>
+                    </div>
+                  </td>
+                  <td className="py-4 px-6">
+                    <div className="flex items-center gap-2 text-white">
+                      <MessageSquare className="h-4 w-4 text-cyan-400 group-hover:text-cyan-300 transition-colors" />
+                      <span className="text-sm">{blog.comments}</span>
+                    </div>
+                  </td>
+                  <td className="py-4 px-6">
+                    <div className="flex items-center gap-1">
+                      <button 
+                        onClick={() => handleEditPost(blog)}
+                        className="p-2 hover:bg-cyan-500/10 rounded-lg transition-colors group" 
+                        title="Edit"
+                      >
+                        <Edit className="h-4 w-4 text-cyan-400 group-hover:text-cyan-300" />
+                      </button>
+                      <button 
+                        onClick={() => handleToggleVisibility(blog.id)}
+                        className="p-2 hover:bg-emerald-500/10 rounded-lg transition-colors group" 
+                        title={blog.visible ? "Hide" : "Show"}
+                      >
+                        {blog.visible ? (
+                          <Eye className="h-4 w-4 text-emerald-400 group-hover:text-emerald-300" />
+                        ) : (
+                          <EyeOff className="h-4 w-4 text-gray-400 group-hover:text-gray-300" />
+                        )}
+                      </button>
+                      <button 
+                        onClick={() => handleDeletePost(blog.id)}
+                        className="p-2 hover:bg-red-500/10 rounded-lg transition-colors group" 
+                        title="Delete"
+                      >
+                        <Trash2 className="h-4 w-4 text-red-400 group-hover:text-red-300" />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+  };
+
+  const handleEmailCampaignChange = (field: string, value: any) => {
+    setEmailCampaign(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleEmailCampaignSubmit = (e: any, schedule: boolean) => {
+    e.preventDefault();
+    
+    const emailList = emailCampaign.bulkEmails
+      .split(/[,\n\r]+/)
+      .map(email => email.trim())
+      .filter(email => email.includes('@'));
+    
+    const campaignData = {
+      ...emailCampaign,
+      emails: emailList,
+      publishedAt: schedule && emailCampaign.scheduledAt 
+        ? new Date(emailCampaign.scheduledAt).toISOString()
+        : new Date().toISOString(),
+      tags: emailCampaign.tags.split(',').map(tag => tag.trim()).filter(tag => tag)
+    };
+    
+    console.log('Email Campaign Data:', campaignData);
+    
+    // Here you would typically send this to your backend API
+    alert(schedule 
+      ? `Campaign scheduled successfully! Will send to ${emailList.length} recipients at ${emailCampaign.scheduledAt}` 
+      : `Campaign sent successfully to ${emailList.length} recipients!`);
+  };
+
+  const renderEmails = () => (
+    <div className="space-y-6">
+      <div className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
+        <div>
+          <h2 className="text-2xl font-bold bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent mb-1">Email Campaign</h2>
+          <p className="text-sm text-gray-400">Create and send bulk email campaigns with scheduling</p>
+        </div>
+      </div>
+
+      <form className="space-y-6">
+        {/* Main Email Template Section */}
+        <div className="bg-black/40 backdrop-blur-xl border border-emerald-500/20 rounded-2xl shadow-[0_0_20px_rgba(34,197,94,0.15)] p-6">
+          <div className="flex items-center gap-3 mb-6">
+            <Mail className="h-6 w-6 text-emerald-400" />
+            <h3 className="text-xl font-bold bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent">Email Template</h3>
+          </div>
+          
+          <div className="grid grid-cols-1 gap-6">
+            {/* Subject */}
+            <div>
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2">
+                <AtSign className="h-4 w-4 text-emerald-400" />
+                Email Subject
+              </label>
+              <input
+                type="text"
+                value={emailCampaign.subject}
+                onChange={(e) => handleEmailCampaignChange('subject', e.target.value)}
+                placeholder="Enter email subject line"
+                className="w-full px-4 py-3 bg-black/40 border border-emerald-500/20 rounded-xl focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 text-white placeholder-gray-500 transition-all outline-none"
+                required
+              />
+            </div>
+
+            {/* Body */}
+            <div>
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2">
+                <AlignLeft className="h-4 w-4 text-emerald-400" />
+                Email Body
+              </label>
+              <textarea
+                value={emailCampaign.body}
+                onChange={(e) => handleEmailCampaignChange('body', e.target.value)}
+                placeholder="Enter your email content here... You can use HTML for formatting."
+                rows={8}
+                className="w-full px-4 py-3 bg-black/40 border border-emerald-500/20 rounded-xl focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 text-white placeholder-gray-500 transition-all outline-none resize-y"
+                required
+              />
+              <p className="text-xs text-gray-500 mt-2">HTML is supported for rich formatting</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Content Metadata Section */}
+        <div className="bg-black/40 backdrop-blur-xl border border-cyan-500/20 rounded-2xl shadow-[0_0_20px_rgba(34,197,94,0.15)] p-6">
+          <div className="flex items-center gap-3 mb-6">
+            <FileText className="h-6 w-6 text-cyan-400" />
+            <h3 className="text-xl font-bold bg-gradient-to-r from-cyan-400 via-emerald-400 to-blue-400 bg-clip-text text-transparent">Content Metadata</h3>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Title */}
+            <div>
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2">
+                <PenTool className="h-4 w-4 text-cyan-400" />
+                Title
+              </label>
+              <input
+                type="text"
+                value={emailCampaign.title}
+                onChange={(e) => handleEmailCampaignChange('title', e.target.value)}
+                placeholder="e.g., 10 Proven Tips to Improve Web Performance in 2025"
+                className="w-full px-4 py-3 bg-black/40 border border-cyan-500/20 rounded-xl focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500/50 text-white placeholder-gray-500 transition-all outline-none"
+              />
+            </div>
+
+            {/* Slug */}
+            <div>
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2">
+                <FileText className="h-4 w-4 text-cyan-400" />
+                Slug
+              </label>
+              <input
+                type="text"
+                value={emailCampaign.slug}
+                onChange={(e) => handleEmailCampaignChange('slug', e.target.value)}
+                placeholder="e.g., improve-web-performance-2025"
+                className="w-full px-4 py-3 bg-black/40 border border-cyan-500/20 rounded-xl focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500/50 text-white placeholder-gray-500 transition-all outline-none"
+              />
+            </div>
+
+            {/* Excerpt */}
+            <div className="md:col-span-2">
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2">
+                <AlignLeft className="h-4 w-4 text-cyan-400" />
+                Excerpt
+              </label>
+              <textarea
+                value={emailCampaign.excerpt}
+                onChange={(e) => handleEmailCampaignChange('excerpt', e.target.value)}
+                placeholder="Brief description or summary of the email content"
+                rows={3}
+                className="w-full px-4 py-3 bg-black/40 border border-cyan-500/20 rounded-xl focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500/50 text-white placeholder-gray-500 transition-all outline-none resize-y"
+              />
+            </div>
+
+            {/* Content */}
+            <div className="md:col-span-2">
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2">
+                <FileText className="h-4 w-4 text-cyan-400" />
+                Full Content
+              </label>
+              <textarea
+                value={emailCampaign.content}
+                onChange={(e) => handleEmailCampaignChange('content', e.target.value)}
+                placeholder="Full content/article text that will be included in the email"
+                rows={6}
+                className="w-full px-4 py-3 bg-black/40 border border-cyan-500/20 rounded-xl focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500/50 text-white placeholder-gray-500 transition-all outline-none resize-y"
+              />
+            </div>
+
+            {/* Category */}
+            <div>
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2">
+                <FolderOpen className="h-4 w-4 text-cyan-400" />
+                Category
+              </label>
+              <input
+                type="text"
+                value={emailCampaign.category}
+                onChange={(e) => handleEmailCampaignChange('category', e.target.value)}
+                placeholder="e.g., Web Development"
+                className="w-full px-4 py-3 bg-black/40 border border-cyan-500/20 rounded-xl focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500/50 text-white placeholder-gray-500 transition-all outline-none"
+              />
+            </div>
+
+            {/* Tags */}
+            <div>
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2">
+                <Tag className="h-4 w-4 text-cyan-400" />
+                Tags (comma-separated)
+              </label>
+              <input
+                type="text"
+                value={emailCampaign.tags}
+                onChange={(e) => handleEmailCampaignChange('tags', e.target.value)}
+                placeholder="e.g., performance, frontend, optimization"
+                className="w-full px-4 py-3 bg-black/40 border border-cyan-500/20 rounded-xl focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500/50 text-white placeholder-gray-500 transition-all outline-none"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Bulk Email Recipients Section */}
+        <div className="bg-black/40 backdrop-blur-xl border border-blue-500/20 rounded-2xl shadow-[0_0_20px_rgba(34,197,94,0.15)] p-6">
+          <div className="flex items-center gap-3 mb-6">
+            <Users className="h-6 w-6 text-blue-400" />
+            <h3 className="text-xl font-bold bg-gradient-to-r from-blue-400 via-cyan-400 to-emerald-400 bg-clip-text text-transparent">Bulk Email Recipients</h3>
+          </div>
+          
+          <div>
+            <label className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2">
+              <Mail className="h-4 w-4 text-blue-400" />
+              Email Addresses (one per line or comma-separated)
+            </label>
+            <textarea
+              value={emailCampaign.bulkEmails}
+              onChange={(e) => handleEmailCampaignChange('bulkEmails', e.target.value)}
+              placeholder="Enter email addresses (one per line or comma-separated): example1@email.com, example2@email.com"
+              rows={8}
+              className="w-full px-4 py-3 bg-black/40 border border-blue-500/20 rounded-xl focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 text-white placeholder-gray-500 transition-all outline-none resize-y font-mono text-sm"
+              required
+            />
+            <div className="flex items-center gap-2 mt-2">
+              <Upload className="h-4 w-4 text-blue-400" />
+              <p className="text-xs text-gray-500">You can also paste a list of emails or upload a CSV file</p>
+            </div>
+            {emailCampaign.bulkEmails && (
+              <p className="text-xs text-emerald-400 mt-2">
+                {emailCampaign.bulkEmails.split(/[,\n\r]+/).filter((e: string) => e.trim().includes('@')).length} valid email(s) detected
+              </p>
+            )}
+          </div>
+        </div>
+
+        {/* Scheduling Section */}
+        <div className="bg-black/40 backdrop-blur-xl border border-purple-500/20 rounded-2xl shadow-[0_0_20px_rgba(34,197,94,0.15)] p-6">
+          <div className="flex items-center gap-3 mb-6">
+            <Calendar className="h-6 w-6 text-purple-400" />
+            <h3 className="text-xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">Scheduling Options</h3>
+          </div>
+          
+          <div className="space-y-4">
+            <div className="flex items-center gap-4">
+              <input
+                type="radio"
+                id="sendNow"
+                name="sendOption"
+                checked={emailCampaign.sendImmediately}
+                onChange={() => handleEmailCampaignChange('sendImmediately', true)}
+                className="w-4 h-4 text-emerald-500 bg-black/40 border-emerald-500/20 focus:ring-emerald-500/50"
+              />
+              <label htmlFor="sendNow" className="text-gray-300 cursor-pointer flex items-center gap-2">
+                <Send className="h-4 w-4 text-emerald-400" />
+                Send Immediately
+              </label>
+            </div>
+            
+            <div className="flex items-center gap-4">
+              <input
+                type="radio"
+                id="schedule"
+                name="sendOption"
+                checked={!emailCampaign.sendImmediately}
+                onChange={() => handleEmailCampaignChange('sendImmediately', false)}
+                className="w-4 h-4 text-emerald-500 bg-black/40 border-emerald-500/20 focus:ring-emerald-500/50"
+              />
+              <label htmlFor="schedule" className="text-gray-300 cursor-pointer flex items-center gap-2">
+                <Clock className="h-4 w-4 text-purple-400" />
+                Schedule for Later
+              </label>
+            </div>
+
+            {!emailCampaign.sendImmediately && (
+              <div className="ml-8 mt-4">
+                <label className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2">
+                  <Calendar className="h-4 w-4 text-purple-400" />
+                  Scheduled Date & Time
+                </label>
+                <input
+                  type="datetime-local"
+                  value={emailCampaign.scheduledAt}
+                  onChange={(e) => handleEmailCampaignChange('scheduledAt', e.target.value)}
+                  className="w-full md:w-auto px-4 py-3 bg-black/40 border border-purple-500/20 rounded-xl focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 text-white transition-all outline-none"
+                  required={!emailCampaign.sendImmediately}
+                />
+                <p className="text-xs text-gray-500 mt-2">Select when to send this email campaign</p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex flex-col sm:flex-row gap-4">
+          <button
+            type="submit"
+            onClick={(e) => handleEmailCampaignSubmit(e, false)}
+            disabled={!emailCampaign.subject || !emailCampaign.body || !emailCampaign.bulkEmails}
+            className="flex-1 flex items-center justify-center gap-3 px-6 py-4 bg-gradient-to-r from-emerald-600 via-cyan-600 to-blue-600 text-white rounded-xl hover:from-emerald-500 hover:via-cyan-500 hover:to-blue-500 transition-all shadow-[0_0_20px_rgba(34,197,94,0.4)] hover:shadow-[0_0_30px_rgba(34,197,94,0.6)] transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+          >
+            <Send className="h-5 w-5" />
+            <span>Send Now</span>
+          </button>
+          
+          <button
+            type="button"
+            onClick={(e) => handleEmailCampaignSubmit(e, true)}
+            disabled={emailCampaign.sendImmediately || !emailCampaign.scheduledAt || !emailCampaign.subject || !emailCampaign.body || !emailCampaign.bulkEmails}
+            className="flex-1 flex items-center justify-center gap-3 px-6 py-4 bg-gradient-to-r from-purple-600 via-pink-600 to-cyan-600 text-white rounded-xl hover:from-purple-500 hover:via-pink-500 hover:to-cyan-500 transition-all shadow-[0_0_20px_rgba(147,51,234,0.4)] hover:shadow-[0_0_30px_rgba(147,51,234,0.6)] transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+          >
+            <Clock className="h-5 w-5" />
+            <span>Schedule Campaign</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  );
+
   const renderGenericTab = (title:any, description:any, icon:any) => (
     <div className="space-y-6">
       <div className="bg-gradient-to-br from-emerald-600 via-cyan-600 to-blue-600 rounded-2xl shadow-[0_0_30px_rgba(34,197,94,0.3)] p-8 text-white text-center relative overflow-hidden">
@@ -574,9 +1375,9 @@ const EdventureDashboard = () => {
       case 'overview':
         return renderOverview();
       case 'blogs':
-        return <BlogManagement/>
+        return renderBlogs();
       case 'emails':
-        return renderGenericTab('Email Campaigns', 'Manage and track your email marketing campaigns', Mail);
+        return renderEmails();
       case 'analytics':
         return renderGenericTab('Analytics Dashboard', 'Deep insights into user behavior and engagement', TrendingUp);
       case 'pages':
@@ -635,6 +1436,9 @@ const EdventureDashboard = () => {
                   onClick={() => {
                     setActiveTab(item.id);
                     setSidebarOpen(false);
+                    if (item.id !== 'blogs') {
+                      setBlogViewMode('list');
+                    }
                   }}
                   className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all relative overflow-hidden group ${
                     activeTab === item.id
