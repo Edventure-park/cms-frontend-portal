@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { CheckCircle, Clock, XCircle, Edit, Activity, Eye, FileText, PenTool, Trash2, FolderOpen, Users, AlignLeft, Tag } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
