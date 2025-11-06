@@ -7,6 +7,7 @@ type StatusType = 'delivered' | 'queued' | 'failed' | 'published' | 'draft' | 'p
 type BlogPost = {
   id: number;
   blogId: string;
+  slug: string;
   title: string;
   author: string;
   status: StatusType;
@@ -109,6 +110,7 @@ function BlogManagement() {
             id: typeof post?.id === 'number' ? post.id : idx + 1,
             blogId: post?.blogId || '',
             title: post?.title || 'Untitled',
+            slug: post?.slug || '',
             author: post?.authorName || 'Unknown',
             status: safeStatus,
             category: post?.category || '',
@@ -285,6 +287,17 @@ function BlogManagement() {
       setIsLoading(false);
     }
   };
+  const viewBlog = async (blog_slug: string) => {
+    try {
+      window.open(`https://main-website-76w.pages.dev/blog/${blog_slug}`, '_blank');
+      
+    } catch (err) {
+      setSubmitError(err instanceof Error ? err.message : 'Failed to load blog');
+      setViewMode('list');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -386,9 +399,10 @@ function BlogManagement() {
     }
   };
 
-  const ActionButtons = ({ blogId }: { blogId: string }) => (
+  const ActionButtons = ({ blogId, blog_slug }: { blogId: string, blog_slug:string }) => (
     <div className="flex items-center gap-1.5">
       <button 
+        onClick={() => viewBlog(blog_slug)} 
         className="p-2 hover:bg-emerald-500/10 rounded-lg transition-all duration-200 group" 
         title="View"
       >
@@ -996,7 +1010,7 @@ function BlogManagement() {
                       </div>
                     </td>
                     <td className="py-4 px-6">{getStatusBadge(blog.status)}</td>
-                    <td className="py-4 px-6"><ActionButtons blogId={blog.blogId} /></td>
+                    <td className="py-4 px-6"><ActionButtons blogId={blog.blogId}  blog_slug={blog.slug} /></td>
                   </tr>
                 ))}
               </tbody>
