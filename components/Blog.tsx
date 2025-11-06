@@ -35,8 +35,10 @@ type FormData = {
   externalUrl: string;
 };
 
-const API_BASE_PRIMARY = "http://127.0.0.1:8787";
-const API_BASE_FALLBACK = "http://localhost:8787";
+// const API_BASE_PRIMARY = "http://127.0.0.1:8787";
+const API_BASE_PRIMARY = "https://hono-backend-cms.edventure-park.workers.dev";
+const API_BASE_FALLBACK = "https://hono-backend-cms.edventure-park.workers.dev";
+// const API_BASE_FALLBACK = "http://localhost:8787";
 
 const initialFormState: FormData = {
   title: "",
@@ -160,6 +162,7 @@ function BlogManagement() {
         const base64 = await convertImageToBase64(file);
         handleFormChange(field, base64);
       } catch (err) {
+        console.log("Error: ", err);
         setSubmitError('Failed to process image');
       }
     }
@@ -371,15 +374,15 @@ function BlogManagement() {
     const isEditMode = viewMode === 'update';
     
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 p-4 md:p-6 lg:p-8">
+      <div className="min-h-screen bg-linear-to-br from-slate-950 via-slate-900 to-slate-950 p-4 md:p-6 lg:p-8">
         <div className="max-w-7xl mx-auto space-y-6">
           <div className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
             <div className="flex items-center gap-3">
-              <div className="p-3 bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 rounded-2xl border border-emerald-500/30 backdrop-blur-sm">
+              <div className="p-3 bg-linear-to-br from-emerald-500/20 to-cyan-500/20 rounded-2xl border border-emerald-500/30 backdrop-blur-sm">
                 {isEditMode ? <Edit className="h-6 w-6 text-emerald-400" /> : <PenTool className="h-6 w-6 text-emerald-400" />}
               </div>
               <div>
-                <h2 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent mb-1">
+                <h2 className="text-2xl md:text-3xl font-bold bg-linear-to-r from-emerald-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent mb-1">
                   {isEditMode ? 'Edit Blog Post' : 'Create New Post'}
                 </h2>
                 <p className="text-sm text-gray-400">
@@ -397,7 +400,7 @@ function BlogManagement() {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="bg-gradient-to-br from-slate-900/80 to-slate-800/50 backdrop-blur-xl border border-emerald-500/20 rounded-2xl shadow-2xl shadow-emerald-500/10 p-6 md:p-8">
+            <div className="bg-linear-to-br from-slate-900/80 to-slate-800/50 backdrop-blur-xl border border-emerald-500/20 rounded-2xl shadow-2xl shadow-emerald-500/10 p-6 md:p-8">
               <div className="flex items-center gap-2 mb-6">
                 <Sparkles className="h-5 w-5 text-emerald-400" />
                 <h3 className="text-lg font-semibold text-emerald-400">Basic Information</h3>
@@ -523,7 +526,7 @@ function BlogManagement() {
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-slate-900/80 to-slate-800/50 backdrop-blur-xl border border-cyan-500/20 rounded-2xl shadow-2xl shadow-cyan-500/10 p-6 md:p-8">
+            <div className="bg-linear-to-br from-slate-900/80 to-slate-800/50 backdrop-blur-xl border border-cyan-500/20 rounded-2xl shadow-2xl shadow-cyan-500/10 p-6 md:p-8">
               <div className="flex items-center gap-2 mb-6">
                 <FileText className="h-5 w-5 text-cyan-400" />
                 <h3 className="text-lg font-semibold text-cyan-400">Content</h3>
@@ -577,7 +580,7 @@ function BlogManagement() {
 
             {isEditMode && (
               <>
-                <div className="bg-gradient-to-br from-slate-900/80 to-slate-800/50 backdrop-blur-xl border border-purple-500/20 rounded-2xl shadow-2xl shadow-purple-500/10 p-6 md:p-8">
+                <div className="bg-linear-to-br from-slate-900/80 to-slate-800/50 backdrop-blur-xl border border-purple-500/20 rounded-2xl shadow-2xl shadow-purple-500/10 p-6 md:p-8">
                   <div className="flex items-center gap-2 mb-6">
                     <ImageIcon className="h-5 w-5 text-purple-400" />
                     <h3 className="text-lg font-semibold text-purple-400">Media & Images</h3>
@@ -668,7 +671,7 @@ function BlogManagement() {
                   </div>
                 </div>
 
-                <div className="bg-gradient-to-br from-slate-900/80 to-slate-800/50 backdrop-blur-xl border border-blue-500/20 rounded-2xl shadow-2xl shadow-blue-500/10 p-6 md:p-8">
+                <div className="bg-linear-to-br from-slate-900/80 to-slate-800/50 backdrop-blur-xl border border-blue-500/20 rounded-2xl shadow-2xl shadow-blue-500/10 p-6 md:p-8">
                   <div className="flex items-center gap-2 mb-6">
                     <Search className="h-5 w-5 text-blue-400" />
                     <h3 className="text-lg font-semibold text-blue-400">SEO Settings</h3>
@@ -703,7 +706,7 @@ function BlogManagement() {
                   </div>
                 </div>
 
-                <div className="bg-gradient-to-br from-slate-900/80 to-slate-800/50 backdrop-blur-xl border border-yellow-500/20 rounded-2xl shadow-2xl shadow-yellow-500/10 p-6 md:p-8">
+                <div className="bg-linear-to-br from-slate-900/80 to-slate-800/50 backdrop-blur-xl border border-yellow-500/20 rounded-2xl shadow-2xl shadow-yellow-500/10 p-6 md:p-8">
                   <div className="flex items-center gap-2 mb-6">
                     <Calendar className="h-5 w-5 text-yellow-400" />
                     <h3 className="text-lg font-semibold text-yellow-400">Publishing Options</h3>
@@ -725,7 +728,7 @@ function BlogManagement() {
                   )}
                 </div>
 
-                <div className="bg-gradient-to-br from-slate-900/80 to-slate-800/50 backdrop-blur-xl border border-indigo-500/20 rounded-2xl shadow-2xl shadow-indigo-500/10 p-6 md:p-8">
+                <div className="bg-linear-to-br from-slate-900/80 to-slate-800/50 backdrop-blur-xl border border-indigo-500/20 rounded-2xl shadow-2xl shadow-indigo-500/10 p-6 md:p-8">
                   <div className="flex items-center gap-2 mb-6">
                     <Link className="h-5 w-5 text-indigo-400" />
                     <h3 className="text-lg font-semibold text-indigo-400">Related Blogs</h3>
@@ -801,7 +804,7 @@ function BlogManagement() {
               <button 
                 type="submit" 
                 disabled={isSubmitting} 
-                className="flex-1 flex items-center justify-center gap-3 px-6 py-4 bg-gradient-to-r from-emerald-600 via-cyan-600 to-blue-600 text-white rounded-xl hover:from-emerald-500 hover:via-cyan-500 hover:to-blue-500 transition-all shadow-lg shadow-emerald-500/30 hover:shadow-emerald-500/50 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none font-medium"
+                className="flex-1 flex items-center justify-center gap-3 px-6 py-4 bg-linear-to-r from-emerald-600 via-cyan-600 to-blue-600 text-white rounded-xl hover:from-emerald-500 hover:via-cyan-500 hover:to-blue-500 transition-all shadow-lg shadow-emerald-500/30 hover:shadow-emerald-500/50 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none font-medium"
               >
                 <CheckCircle className="h-5 w-5" />
                 <span>{isSubmitting ? (isEditMode ? 'Updating...' : 'Creating...') : (isEditMode ? 'Update Post' : 'Create Post')}</span>
@@ -822,21 +825,21 @@ function BlogManagement() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 p-4 md:p-6 lg:p-8">
+    <div className="min-h-screen bg-linear-to-br from-slate-950 via-slate-900 to-slate-950 p-4 md:p-6 lg:p-8">
       <div className="max-w-7xl mx-auto space-y-6">
         <div className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
           <div className="flex items-center gap-3">
-            <div className="p-3 bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 rounded-2xl border border-emerald-500/30 backdrop-blur-sm">
+            <div className="p-3 bg-linear-to-br from-emerald-500/20 to-cyan-500/20 rounded-2xl border border-emerald-500/30 backdrop-blur-sm">
               <FileText className="h-6 w-6 text-emerald-400" />
             </div>
             <div>
-              <h2 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent mb-1">Blog Management</h2>
+              <h2 className="text-2xl md:text-3xl font-bold bg-linear-to-r from-emerald-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent mb-1">Blog Management</h2>
               <p className="text-sm text-slate-400">Create and manage your content</p>
             </div>
           </div>
           <button 
             onClick={() => setViewMode('create')} 
-            className="flex items-center gap-2 px-5 py-3 bg-gradient-to-r from-emerald-600 via-cyan-600 to-blue-600 text-white rounded-xl hover:from-emerald-500 hover:via-cyan-500 hover:to-blue-500 transition-all shadow-lg shadow-emerald-500/30 hover:shadow-emerald-500/50 transform hover:scale-105 font-medium"
+            className="flex items-center gap-2 px-5 py-3 bg-linear-to-r from-emerald-600 via-cyan-600 to-blue-600 text-white rounded-xl hover:from-emerald-500 hover:via-cyan-500 hover:to-blue-500 transition-all shadow-lg shadow-emerald-500/30 hover:shadow-emerald-500/50 transform hover:scale-105 font-medium"
           >
             <PenTool className="h-5 w-5" />
             <span className="hidden sm:inline">Create New Post</span>
@@ -844,7 +847,7 @@ function BlogManagement() {
           </button>
         </div>
 
-        <div className="bg-gradient-to-br from-slate-900/80 to-slate-800/50 backdrop-blur-xl border border-emerald-500/20 rounded-2xl shadow-2xl shadow-emerald-500/10 overflow-hidden">
+        <div className="bg-linear-to-br from-slate-900/80 to-slate-800/50 backdrop-blur-xl border border-emerald-500/20 rounded-2xl shadow-2xl shadow-emerald-500/10 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full min-w-[800px]">
               <thead>
@@ -916,7 +919,7 @@ function BlogManagement() {
                     </td>
                     <td className="py-4 px-6">
                       <div className="flex items-center gap-2">
-                        <div className="w-7 h-7 rounded-full bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center border border-purple-500/30">
+                        <div className="w-7 h-7 rounded-full bg-linear-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center border border-purple-500/30">
                           <Users className="h-3.5 w-3.5 text-purple-400" />
                         </div>
                         <span className="text-sm text-slate-300 truncate">{blog.author}</span>
@@ -942,7 +945,7 @@ function BlogManagement() {
 
       {deleteConfirmId && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in duration-200">
-          <div className="bg-gradient-to-br from-slate-900 to-slate-800 border border-red-500/30 rounded-2xl shadow-2xl shadow-red-500/20 max-w-md w-full p-6 animate-in zoom-in-95 duration-200">
+          <div className="bg-linear-to-br from-slate-900 to-slate-800 border border-red-500/30 rounded-2xl shadow-2xl shadow-red-500/20 max-w-md w-full p-6 animate-in zoom-in-95 duration-200">
             <div className="flex items-center gap-3 mb-4">
               <div className="p-3 bg-red-500/10 rounded-full">
                 <Trash2 className="h-6 w-6 text-red-400" />
@@ -975,7 +978,7 @@ function BlogManagement() {
               <button
                 onClick={() => handleDelete(deleteConfirmId)}
                 disabled={isDeleting}
-                className="flex-1 px-4 py-3 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-xl hover:from-red-500 hover:to-red-600 transition-all shadow-lg shadow-red-500/30 hover:shadow-red-500/50 font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="flex-1 px-4 py-3 bg-linear-to-r from-red-600 to-red-700 text-white rounded-xl hover:from-red-500 hover:to-red-600 transition-all shadow-lg shadow-red-500/30 hover:shadow-red-500/50 font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {isDeleting ? (
                   <>
