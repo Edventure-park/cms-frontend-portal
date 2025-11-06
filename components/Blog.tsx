@@ -155,15 +155,85 @@ function BlogManagement() {
     });
   };
 
+  const compressAndConvertImage = (file: File, maxSizeKB: number = 500): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+          
+          // Calculate dimensions to keep aspect ratio while reducing size
+          const maxDimension = 1200;
+          if (width > height && width > maxDimension) {
+            height = (height * maxDimension) / width;
+            width = maxDimension;
+          } else if (height > maxDimension) {
+            width = (width * maxDimension) / height;
+            height = maxDimension;
+          }
+          
+          canvas.width = width;
+          canvas.height = height;
+          
+          const ctx = canvas.getContext('2d');
+          if (!ctx) {
+            reject(new Error('Failed to get canvas context'));
+            return;
+          }
+          
+          ctx.drawImage(img, 0, 0, width, height);
+          
+          // Start with high quality and reduce if needed
+          let quality = 0.9;
+          let compressedBase64 = canvas.toDataURL('image/jpeg', quality);
+          
+          // Reduce quality until file size is acceptable
+          while (compressedBase64.length > maxSizeKB * 1024 * 1.37 && quality > 0.1) {
+            quality -= 0.1;
+            compressedBase64 = canvas.toDataURL('image/jpeg', quality);
+          }
+          
+          resolve(compressedBase64);
+        };
+        img.onerror = () => reject(new Error('Failed to load image'));
+        img.src = e.target?.result as string;
+      };
+      reader.onerror = () => reject(new Error('Failed to read file'));
+      reader.readAsDataURL(file);
+    });
+  };
+
   const handleImageUpload = async (field: 'featuredImage' | 'authorProfileImage', e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       try {
-        const base64 = await convertImageToBase64(file);
-        handleFormChange(field, base64);
+        // Validate file type
+        if (!file.type.startsWith('image/')) {
+          setSubmitError('Please select a valid image file');
+          return;
+        }
+        
+        // Validate file size (max 10MB original)
+        if (file.size > 10 * 1024 * 1024) {
+          setSubmitError('Image file is too large. Please select an image under 10MB');
+          return;
+        }
+        
+        // Show loading state
+        setSubmitError('Compressing image...');
+        
+        // Compress image (max 500KB for featured, 200KB for profile)
+        const maxSize = field === 'featuredImage' ? 500 : 200;
+        const compressedBase64 = await compressAndConvertImage(file, maxSize);
+        
+        handleFormChange(field, compressedBase64);
+        setSubmitError('');
       } catch (err) {
-        console.log("Error: ", err);
-        setSubmitError('Failed to process image');
+        console.error("Image compression error:", err);
+        setSubmitError('Failed to process image. Please try a different image.');
       }
     }
   };
